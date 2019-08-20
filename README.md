@@ -1,68 +1,72 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 초보를 위한 ReactJS
 
-## Available Scripts
+## `1. Fundamentals`
 
-In the project directory, you can run:
+## #1.0 Introduction
 
-### `npm start`
+### 반드시 알아둬야 할 컨셉
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Arrow function
+2. Template Literals
+3. Object Destructuring
+4. Spread Operator
+5. Classes
+6. Array.map
+7. Array.filter
+8. forEach / includes / push
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## #1.1 Arrow Function
 
-### `npm test`
+- 화살표 함수는 기보적으로 return 을 한다는 것이 함축되어 있음
+- argument 가 하나일 때는 괄호가 필요 없음
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## #1.2 Template Literals
 
-### `npm run build`
+- `(backticks) 를 사용 함
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## #1.3 Object Destructuring
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## #1.4 Spread Operator
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## #1.5 Classes
 
-### `npm run eject`
+## #1.6 Array.map
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- return 한 값으로 이루어진 배열을 return 함
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## #1.7 Array.filter
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- 주어진 function을 통과한 모든 원소들로 이루어진 배열을 return 함
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## #1.8 .forEach / .includes / .push
 
-## Learn More
+- .forEach : 각각의 아이템에 대해서 어떠한 시행만 함. map과 달리 배열을 return 하지 않음
+- .includes : 배열에 특정 아이템이 존재하는지 확인할 수 있음
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## `2. Project Setup`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## #2.0 Setting Up the Project
 
-### Code Splitting
+1. `yarn global add npx`<br>
+2. `npx create-react-app nomflix`
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+- npx는 패키지를 설치하고 실행 후 작업이 끝나면 PC에서 삭제함
+```js
+//App.js
+import React, { Component } from 'react';
 
-### Analyzing the Bundle Size
+class App extends Component {
+  render() {
+    return <div className="App" />;
+  }
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+export default App;
 
-### Making a Progressive Web App
+// index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+ReactDOM.render(<App />, document.getElementById('root'));
+```
