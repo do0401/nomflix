@@ -255,7 +255,7 @@ export default () => (
 - 이렇게 하면 navList라는 것을 다른 파일에서도 반복해서 사용할 수 있다.
 - 하지만 여전히 className을 기억해야 한다. 위와 같은 방식은 안전하지만 이상적인 형태는 아니다.
 
-## #3.1 CSS in React Part Three
+## #3.2 CSS in React Part Three
 
 - 마지막으로 javascript를 이용한 CSS인 styled-components 로 적용해 본다.
 
@@ -335,3 +335,127 @@ export default () => (
 ```
 
 - styled-components를 사용하면 코드가 HTML 태그들이 많은 것보다 더 나아보이고 내가 주어진 이름을 사용하며, 모든 컴포넌트들의 스타일을 쉽게 바꿀 수 있다.
+
+## #3.3 GlobalStyles and Header
+
+- 이제 styled-components를 global 하게 스타일한다.
+- global 하게 스타일하는 이유는 해당 사이트의 폰트를 설정하거나 SC(styled-components)를 설치하거나 그런 것들을 하기 위해서이다.
+
+`yarn add styled-reset`
+- styled-reset은 SC를 이용해서 css를 초기화하고 0의 상태에서 시작하게 하는 것이다.
+
+```jsx
+// GlobalStyles.js
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
+
+const globalStyles = createGlobalStyle`
+    ${reset};
+    a{
+        text-decoration:none;
+        color:inherit;
+    }
+    *{
+        box-sizing:border-box;
+    }
+    body{
+        font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-size:12px;
+        background-color:rgba(20, 20, 20, 1);
+        color:white;
+        padding-top:50px;
+    }
+`;
+
+export default globalStyles;
+
+// App.js
+import React, { Component } from 'react';
+import Router from "Components/Router";
+import GlobalStyles from "Components/GlobalStyles";
+class App extends Component {
+  render() {
+    return (
+      <>
+        <Router />
+        <GlobalStyles />
+      </>
+    );
+  }
+}
+
+export default App;
+```
+
+- GlobalStyles.js는 특정 컴포넌트들의 스타일을 넣지 않고 Global한 웹사이트의 스타일을 넣는다.
+
+```jsx
+// Header.jsx
+const Header = styled.header`
+	color: white;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	background-color: rgba(20, 20, 20, 0.8);
+	z-index: 10;
+	box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.8);
+`;
+
+const List = styled.ul`display: flex;`;
+
+const Item = styled.li`
+	width: 80px;
+	height: 50px;
+	text-align: center;
+`;
+
+const SLink = styled(Link)`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+```
+
+- Header.jsx 쪽 스타일도 추가한다.
+
+## #3.4 Location Aware Header
+
+- 현재 어떤 Route(탭)에 있는지 표시되도록 작업한다.
+- SC 에서는 내가 설정한 각 SC에 props를 줄 수 있다.
+
+```jsx
+// Header.jsx
+import { Link, withRouter } from 'react-router-dom';  // widthRouter 추가
+                                                      // widthRouter는 다른 컴포넌트를 감싸는 컴포넌트이고, Router에 어떠한 정보를 준다.
+
+const Item = styled.li`
+	width: 80px;
+	height: 50px;
+	text-align: center;
+	border-bottom: 5px solid ${(props) => (props.current ? '#3498db' : 'transparent')};
+	transition: border-bottom .3s ease-in-out;
+`;
+
+export default withRouter(({ location: { pathname } }) => (
+	<Header>
+		<List>
+			<Item current={pathname === '/'}>
+				<SLink to="/"> Movies </SLink>{' '}
+			</Item>{' '}
+			<Item current={pathname === '/tv'}>
+				<SLink to="/tv"> TV </SLink>{' '}
+			</Item>{' '}
+			<Item current={pathname === '/search'}>
+				<SLink to="/search"> Search </SLink>{' '}
+			</Item>{' '}
+		</List>{' '}
+	</Header>
+));
+```
+
+- props를 통해 pathname을 얻고, pathname 값이 맞는지 boolean 값으로 return하여 border-bottom이 현재 Route에 해당하는 목록 아래에 표시되도록 적용했다. 매우 인상적이다.
