@@ -459,3 +459,78 @@ export default withRouter(({ location: { pathname } }) => (
 ```
 
 - props를 통해 pathname을 얻고, pathname 값이 맞는지 boolean 값으로 return하여 border-bottom이 현재 Route에 해당하는 목록 아래에 표시되도록 적용했다. 매우 인상적이다.
+
+## `4. Networking`
+
+## #4.0 Introduction to The Movie DB API
+
+- 영화 데이터는 The Movie DB API를 통해 가져온다.
+`API key: 130d29120bf323201527d7659ad76018`
+
+## #4.1 Sexy Networking with Axios Instances
+
+- networking 작업을 위해 axios를 설치한다
+
+`yarn add axios`
+
+- axios의 좋은 점은, 우리가 Axios의 인스턴스를 configure(설정) 해줄 수 있다는 것이다.
+- baseURL, headers, timeout 같은 것들을 여러 곳에서 반복해서 작성해 줄 필요가 없다는 것이다.
+
+```js
+// app.js
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "https://api.themoviedb.org/3/",
+  params: {
+    api_key: "130d29120bf323201527d7659ad76018",
+    language: "en-US"
+  }
+});
+
+export default api;
+```
+
+- app.js 파일을 생성하고 axios를 이용한 기본 설정을 한다.
+
+## #4.2 API Verbs part One
+
+- app.js에 2개의 큰 오브젝트를 생성한다. 여기에 모든 request와 function들을 넣는다.
+
+```js
+// app.js
+export const moviesApi = {
+  nowPlaying: () => api.get("movie/now_playing"),
+  upcoming: () => api.get("movie/upcoming"),
+  popular: () => api.get("movie/popular")
+};
+
+export const tvApi = {
+  topRated: () => api.get("tv/top_rated"),
+  popular: () => api.get("tv/popular"),
+  airingTodday: () => api.get("tv/airing_today")
+};
+```
+
+- axios를 이용하면 이렇게 명확하고 깔끔한 코드를 작성할 수 있다.
+
+## #4.3 API Verbs part Two
+
+- app.js에서 movieDetail과 showDetail을 추가한다.
+
+```js
+// app.js
+export const moviesApi = {
+  nowPlaying: () => api.get("movie/now_playing"),
+  upcoming: () => api.get("movie/upcoming"),
+  popular: () => api.get("movie/popular"),
+  movieDetail: id => api.get(`movie/${id}`)
+};
+
+export const tvApi = {
+  topRated: () => api.get("tv/top_rated"),
+  popular: () => api.get("tv/popular"),
+  airingTodday: () => api.get("tv/airing_today"),
+  showDetail: id => api.get(`tv/${id}`)
+};
+```
