@@ -534,3 +534,186 @@ export const tvApi = {
   showDetail: id => api.get(`tv/${id}`)
 };
 ```
+
+- api에서는 "append_to_response"를 지원하는데, 이를 통해서 예고편이나 포스터를 가져올 수 있다.
+
+```js
+// app.js
+export const moviesApi = {
+  nowPlaying: () => api.get("movie/now_playing"),
+  upcoming: () => api.get("movie/upcoming"),
+  popular: () => api.get("movie/popular"),
+  movieDetail: id => api.get(`movie/${id}`, {
+    params: {
+      append_to_response: "videos"
+    }
+  }),
+  search: term => api.get("search/movie", {
+    params: {
+      query: encodeURIComponent(term) // 어떤 파라미터 값을 넘기든지 값을 인코딩하고 그 문자열로 검색한다
+    }
+  })
+};
+
+export const tvApi = {
+  topRated: () => api.get("tv/top_rated"),
+  popular: () => api.get("tv/popular"),
+  airingTodday: () => api.get("tv/airing_today"),
+  showDetail: id => api.get(`tv/${id}`, {
+    params: {
+      append_to_response: "videos"
+    }
+  }),
+  search: term => api.get("search/tv", {
+    params: {
+      query: encodeURIComponent(term)
+    }
+  })
+};
+```
+
+## `5. Containers`
+
+## #5.0 Container Presenter Pattern part One
+
+- 이번에는 API verbs, functions들을 화면 않에 넣을 것이다.
+- 만약 어플리케이션 크기가 작다면, 컴포넌트들을 만들고 마운트되었을 때, api에서 데이터를 불러오고, 그 요소를 렌더링하는 방식으로 작업할 것이다.
+- 하지만 어플리케이션 크기가 작지 않다면 그렇게 하는 것은 좋지 않다.
+- 우리는 리엑트 컴포넌트 코딩 패턴, "컨테이너 프리젠터 패턴" 이라는 방식을 사용할 것이다.
+- 이것이 작동하는 방법은 컨테이너는 data를 가지고, state(상태값)를 가지고, api를 불러온다.
+- 그 다음에 프리젠터는 그 데이터들을 보여주는 역할을 한다.
+- 프리젠터는 state를 가지고 있지 않고 api가 뭔지도 모르고, 클래스도 없고, 그냥 함수형 컴포넌트이다.
+- 즉, 프리젠터는 스타일이고, 컨테이너는 데이터이다.
+
+- Routes 폴더 안에 Detail, Home, Search, TV 폴더를 만들고 그 안에 각각의 index.js 파일과 Container, Presenter 파일을 생성한다.
+
+```jsx
+// Home/index.js
+import HomeContainer from "./HomeContainer";
+
+export default HomeContainer;
+
+// HomePresenter.jsx
+export default () => 'Home';
+
+// HomeContainer.jsx
+import React from 'react';
+import HomePresenter from '.HomePresenter';
+
+export default class extends React.Component {
+	state = {
+		nowPlaying: null,
+		upcoming: null,
+		popular: null,
+		error: null,
+		loading: true
+	};
+
+	render() {
+		const { nowPlaying, upcoming, popular, error, loading } = this.state;
+		return (
+			<HomePresenter
+				nowPlaying={nowPlaying}
+				upcoming={upcoming}
+				popular={popular}
+				error={error}
+				loaidng={loading}
+			/>
+		);
+	}
+}
+```
+
+- 첫번째 컨테이너 컴포넌트를 생성했다.
+- Home 화면에서는 nowPlaying, upcoming, popular를 보여줄 것이므로 state를 위와 같이 결정했다.
+- 우리는 당분간 컨테이너만 가지고 작업할 것이고, 컨테이너를 먼저 만들고 api 메소드를 추가한 다음에 데이터를 보여주는 작업을 할 것이다.
+
+## #5.1 Container Presenter Pattern part Two
+
+- TV, Search, Detail에도 동일한 작업(컨테이너, 프리젠터)을 한다.
+
+```jsx
+// TVContainer.jsx
+import React from 'react';
+import TVPresenter from './TVPresenter';
+
+export default class extends React.Component {
+	state = {
+		topRated: null,
+		popular: null,
+		airingToday: null,
+		error: null,
+		loading: true
+	};
+
+	render() {
+		const { topRated, airingToday, popular, error, loading } = this.state;
+		return (
+			<TVPresenter
+				topRated={topRated}
+				airingToday={airingToday}
+				popular={popular}
+				error={error}
+				loaidng={loading}
+			/>
+		);
+	}
+}
+
+// TVPresenter.jsx
+export default () => 'TV';
+
+// SearchContainer.jsx
+import React from 'react';
+import SearchPresenter from './SearchPresenter';
+
+export default class extends React.Component {
+	state = {
+		movieResults: null, // 누군가 검색 시 movie, tv 모두 보여줄 것이다. 그래서 result를 두 개 만든다.
+		tvResults: null,
+		seachTerm: '',
+		error: null,
+		loading: false  // 디폴트로 아무 것도 로딩하지 않을 것이므로 false이다.
+  };
+  // 기본적으로 Search에서 loading은 false가 되고, error도 없고, searchTerm은 empty고, 검색하고 엔터를 누르면 loading이 true가 되고, 그 결과값을 results에 넣을 것이다.
+
+	render() {
+		const { movieResults, tvResults, seachTerm, error, loading } = this.state;
+		return (
+			<SearchPresenter
+				movieResults={movieResults}
+				tvResults={tvResults}
+				seachTerm={seachTerm}
+				error={error}
+				loaidng={loading}
+			/>
+		);
+	}
+}
+
+// SearchPresenter.jsx
+export default () => 'Search';
+
+// DetailContainer.jsx
+import React from 'react';
+import DetailPresenter from './DetailPresenter';
+
+export default class extends React.Component {
+	state = {
+		result: null, // 여기는 result를 하나만 가진다.
+		error: null,
+		loading: true
+	};
+
+	render() {
+		const { result, error, loading } = this.state;
+		return <DetailPresenter result={result} error={error} loaidng={loading} />;
+	}
+}
+
+// DetailPresenter.jsx
+export default () => 'Detail';
+```
+
+- DetailContainer.jsx 내용을 간단히 설명하자면, 우리가 movie, show를 찾을 때 ID를 갖고 가므로 그 작업들이 끝나면 ID를 가져와서 그걸로 검색하고 결과값(result)를 보여주는 것이다.
+- result가 movie든 show든 똑같다. 같은 result, 같은 라우터 Detail을 사용한다.
