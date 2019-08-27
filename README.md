@@ -717,3 +717,109 @@ export default () => 'Detail';
 
 - DetailContainer.jsx 내용을 간단히 설명하자면, 우리가 movie, show를 찾을 때 ID를 갖고 가므로 그 작업들이 끝나면 ID를 가져와서 그걸로 검색하고 결과값(result)를 보여주는 것이다.
 - result가 movie든 show든 똑같다. 같은 result, 같은 라우터 Detail을 사용한다.
+
+## #5.2 Home Container
+
+- 먼저 홈 컨테이너 작업을 한다.
+- 두 가지 방법이 있다. 하나는 전체 API 요청을 componentDidMount() 안에서 할 수 있고, 각각의 요청을 분리된 함수로 밖에 만들어서 componentDidMount() 안에서 this 를 사용해서 따로 요청할 수 있다.
+- 우리의 경우, 해야하는 범위가 크지 않기 때문에 componentDidMount() 안에서 작업한다.
+
+```jsx
+// HomeContainer.jsx
+// 추가 코드
+import { moviesApi } from "api";
+
+  async componentDidMount() {
+		try {
+			const nowPlaying = await moviesApi.nowPlaying();
+			console.log(nowPlaying);
+		} catch {
+			this.setState({
+				error: "Can't find movies information."
+			})
+		} finally {
+			this.setState({
+				loading: false  // try하고 작동하지 않으면 catch 처리를 해주고, 결과가 어떻든 마지막에는 loading 값을 false로 만들어 준다. 에러를 보여주든, 영화를 보여주든.
+			});
+		}
+	}
+```
+
+- 위 코드에서 객체 비구조화를 한다. Object Deconstruction(객체 비구조화 할당)
+
+```jsx
+// HomeContainer.jsx
+	async componentDidMount() {
+		try {
+      const { data: { results: nowPlaying } } = await moviesApi.nowPlaying(); 
+      // data 안에 있는 results를 할당했다. nowPlaying 데이터만 얻어올 것이 아니기 때문에 results 변수명을 그대로 쓰면 안된다. 변수명을 nowPlaying으로 변경한다.
+			console.log(nowPlaying);
+		} catch {
+			this.setState({
+				error: "Can't find movies information."
+			})
+		} finally {
+			this.setState({
+				loading: false
+			});
+		}
+	}
+```
+
+- 위 방식으로 upcoming과 popular 데이터도 작업한다.
+
+```jsx
+// HomeContainer.jsx
+  async componentDidMount() {
+		try {
+			const { data: { results: nowPlaying } } = await moviesApi.nowPlaying();
+			const { data: { results: upcoming } } = await moviesApi.upcoming();
+      const { data: { results: popular } } = await moviesApi.popular();
+      this.setState({
+        nowPlaying,
+        upcoming,
+        popular
+      })
+		} catch {
+			this.setState({
+				error: "Can't find movie information."
+			})
+		} finally {
+			this.setState({
+				loading: false
+			});
+		}
+	}
+```
+
+## #5.3 TV Container
+
+- TV Container도 매우 비슷하다.
+
+```jsx
+// TVContainer.jsx
+// 추가 코드
+import { tvApi } from '../../api';
+
+  async componentDidMount() {
+		try {
+			const { data: { results: topRated } } = await tvApi.topRated();
+			const { data: { results: popular } } = await tvApi.popular();
+      const { data: { results: airingToday } } = await tvApi.airingToday();
+			this.setState({
+				topRated,
+				popular,
+				airingToday
+			});
+		} catch {
+			this.setState({
+				error: "Can't find TV information."
+			});
+		} finally {
+			this.setState({
+				loading: false
+			})
+		}
+	}
+```
+
