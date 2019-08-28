@@ -823,3 +823,73 @@ import { tvApi } from '../../api';
 	}
 ```
 
+## #5.4 Search Container
+
+- Search Container는 모든 logic을 가질 것이다.
+- 첫번째 로직은 누군가 폼에서 text를 입력하고, 엔터를 누르는 handleSubmit 이다.
+
+```jsx
+// SearchContainer.jsx
+// 추가 코드
+import { moviesApi, tvApi } from "../../api";
+
+handleSubmit = () => {
+		const { searchTerm } = this.state;
+		if (searchTerm !== "") {    // 공백이 아닌 것을 체크하고, searchByTerm 함수를 실행한다.
+			this.searchByTerm();
+		}
+	};
+
+	searchByTerm = async () => {
+		const { searchTerm } = this.state;
+    this.setState({ loading: true });   // 함수가 실행되면 loading을 true로 변경한다.
+    try {
+      const {
+        data: { results: movieResults }
+      } = await moviesApi.search(searchTerm);   // 입력 값으로 영화를 검색한다.
+      const {
+        data: { results: tvResults }
+      } = await tvApi.search(searchTerm);       // 입력 값으로 tv를 검색한다.
+			this.setState({
+				movieResults,
+				tvResults
+			});
+		} catch {
+			this.setState({ error: "Can't find results. "});
+		} finally {
+			this.setState({ loading: false });
+		}
+  };
+  
+  <SearchPresenter
+    movieResults={movieResults}
+    tvResults={tvResults}
+    seachTerm={searchTerm}
+    error={error}
+    loaidng={loading}
+    handleSubmit={this.handleSubmit}    // 누군가 폼을 제출할 때, handleSubmit을 호출하기 위해 SearchPresenter에 보낸다.
+  />
+```
+
+- SearchPresenter에서 폼을 만들고, 폼 셋업하고, handleSubmit을 호출하기 위해 onSubmit을 호출할 것이다.
+- handleSubmit은 searchByTerm을 호출하고, searchByTerm이 모든 작업들을 준비해 줄 것이다.
+
+```jsx
+// Router.jsx
+// 추가 코드
+import Detail from "Routes/Detail";
+
+  <Route path="/movie/:id" component={Detail} />
+  <Route path="/show/:id" component={Detail} />
+```
+
+- 우리는 영화든, tv든 사용자가 찾는 것의 id를 가지고 movieDetail로 데려가 줄 것이다.
+- 라우터는 영화를 위한 것과 tv를 위한 것, 2개를 만들 것이다.
+
+## #5.5 Detail Container part One
+
+- Header 컴포넌트는 우리의 라우터 위치를 알고 있다.
+- withRouter 컴포넌트를 가지고 꾸며줬고, 라우터 컴포넌트와 라우터 함수들을 가지고 있으므로 이 작업들을 Detail에 해줄 필요는 없다.
+- 왜냐하면 기본적으로 리액트 Router가 모든 정보를 Route에게 줄 것이기 때문이다.
+- 예를 들면, 로케이션 정보는 Header에게 주지 않는다. Header는 허락되지 않기 때문이다.
+- 하지만 Home, TV, Search, Detail 과 같은 Route들에게 Router는 props를 준다.
