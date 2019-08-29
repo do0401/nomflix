@@ -891,5 +891,95 @@ import Detail from "Routes/Detail";
 - Header 컴포넌트는 우리의 라우터 위치를 알고 있다.
 - withRouter 컴포넌트를 가지고 꾸며줬고, 라우터 컴포넌트와 라우터 함수들을 가지고 있으므로 이 작업들을 Detail에 해줄 필요는 없다.
 - 왜냐하면 기본적으로 리액트 Router가 모든 정보를 Route에게 줄 것이기 때문이다.
-- 예를 들면, 로케이션 정보는 Header에게 주지 않는다. Header는 허락되지 않기 때문이다.
+- 예를 들면, Header는 Route가 아니기 때문에 Router에서 location 정보를 받을 수 없다.
 - 하지만 Home, TV, Search, Detail 과 같은 Route들에게 Router는 props를 준다.
+
+- 해야할 작업이 두 가지 있다. 첫번째, 우리가 /movie에 있는지 /tv에 있는지 알아내야 한다.
+- 두번째, 어떤 숫자(id)가 /movie 또는 /tv 뒤에 붙어있는지 알아내야 한다.
+
+```jsx
+// DetailContainer.jsx
+// 추가 코드
+async componentDidMount() {
+  const { match: { params: { id } }, history: { push } } = this.props;  // 마운트되면 props에서 id를 가져온다.
+  const parsedId = parseInt(id);    // id가 string일 것이므로 parsedInt로 number로 바꿔준다.
+  if (isNaN(parsedId)) {            // id가 NaN인 경우,
+    return push('/');               // Home으로 리다이렉션 시켜준다. return 을 하지 않으면 함수를 끝내지 않으므로 return을 사용한다.
+  }
+}
+```
+
+## #5.5 Detail Container part Two
+
+- URL을 갖고 와야한다. 이번에도 props에서 path를 가져온다.
+
+```jsx
+// DetailContainer.jsx
+// 추가 코드
+async componentDidMount() {
+  const { match: { params: { id } }, history: { push }, location: { pathname } } = this.props;
+  this.isMovie = pathname.includes('/movie/');    // isMovis를 전역으로 선언했다. 마치 this.state나 this.handleSubmit을 사용한 것처럼 선언했고
+  const parsedId = parseInt(id);
+  if (isNaN(parsedId)) {
+    return push('/');
+  }
+  console.log(this.isMovie);
+}
+```
+
+- 렌더링할 것이 없을 때 isMovie를 전역으로 선언한 것과 같은 방식으로 사용할 수 있다.
+- 생성자를 사용하려면 아래와 같다.
+
+```jsx
+// DetailContainer.jsx
+// 변경 코드
+constructor(props) {
+  super(props);
+  const { location: { pathname } } = props;
+  this.state = {
+    result: null,
+    error: null,
+    loading: true,
+    isMovie: pathname.includes('/movie/')
+  };
+}
+
+async componentDidMount() {
+  const { match: { params: { id } }, history: { push } } = this.props;
+  const { isMovie } = this.state;
+  const parsedId = parseInt(id);
+  if (isNaN(parsedId)) {
+    return push('/');
+  }
+  console.log(this.isMovie);
+}
+```
+
+- 생성자를 사용해서 state 안에 넣어서 사용할 수도 있고, 이전처럼 this.isMovie 로 사용할 수도 있다.
+
+```jsx
+// DetailContainer.jsx
+// 추가 코드
+async componentDidMount() {
+  const { match: { params: { id } }, history: { push } } = this.props;
+  const { isMovie } = this.state;
+  const parsedId = parseInt(id);
+  if (isNaN(parsedId)) {
+    return push('/');
+  }
+  let result = null;
+  try {
+    if (isMovie) {    // 현재 URL path에 /movie/가 있으면 true
+      const request = await moviesApi.movieDetail(parsedId);  // parsedId를 movieDetail 함수에 넣어서 결과를 받아온다.
+      result = request.data;
+    } else {
+      const request = await tvApi.showDetail(parsedId);
+      result = request.data;
+    }
+  } catch {
+    this.setState({ error: "Can't find anything."});
+  } finally {
+    this.setState({ loading: false, result });
+  }
+}
+```
