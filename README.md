@@ -909,7 +909,7 @@ async componentDidMount() {
 }
 ```
 
-## #5.5 Detail Container part Two
+## #5.6 Detail Container part Two
 
 - URL을 갖고 와야한다. 이번에도 props에서 path를 가져온다.
 
@@ -983,3 +983,100 @@ async componentDidMount() {
   }
 }
 ```
+
+## #5.7 Detructuring assignment with let
+
+```jsx
+// DetailContainer.jsx
+// 코드 수정
+let result = null;
+try {
+  if (isMovie) {
+    ({ data: result } = await moviesApi.movieDetail(parsedId));
+  } else {
+    ({ data: result } = await tvApi.showDetail(parsedId));
+  }
+}
+```
+
+- request(요청)은 data키를 주므로 request.data는 result와 같다.
+- 위에서 `{ data: result } = await moviesApi.movieDetail(parsedId)` 부분을 감싸준 괄호는 `const =` 와 같은 의미이다.
+- const를 사용하지 않은 이유는 try 안에 result를 const로 선언하면 finally에서 result 변수를 사용할 수 없기 때문이다.
+
+## `6. Presenters`
+
+## #6.0 Presenter Structure
+
+- Presenter가 어떻게 되어야 하는지 도면처럼 설계한다.
+
+```jsx
+// TVPresenter.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+const TVPresenter = ({ topRated, popular, airingToday, loading, error }) => null;
+
+TVPresenter.prototype = {
+	topRated: PropTypes.array,
+	popular: PropTypes.array,
+	airingToday: PropTypes.array,
+	loading: PropTypes.bool.isRequired,
+	error: PropTypes.string
+};
+
+export default TVPresenter;
+
+// SearchPresenter.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+const SearchPresenter = ({ movieResults, tvResults, airingToday, loading, searchTerm, handleSubmit, error }) => null;
+
+SearchPresenter.prototype = {
+	movieResults: PropTypes.array,
+	tvResults: PropTypes.array,
+	error: PropTypes.string,
+	searchTerm: PropTypes.string,
+	loading: PropTypes.bool.isRequired,
+	handleSubmit: PropTypes.func.isRequired
+};
+
+export default SearchPresenter;
+
+// HomePresenter.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) => null;
+
+HomePresenter.prototype = {
+	nowPlaying: PropTypes.array,
+	popular: PropTypes.array,
+	upcoming: PropTypes.array,
+	loading: PropTypes.bool.isRequired,
+	error: PropTypes.string
+};
+
+export default HomePresenter;
+
+// DetailPresenter.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+const DetailPresenter = ({ result, loading, error }) => null;
+
+DetailPresenter.prototype = {
+	result: PropTypes.object,
+	loading: PropTypes.bool.isRequired,
+	error: PropTypes.string
+};
+
+export default DetailPresenter;
+
+```
+
+- 먼저 4개의 presenter에 사전 작업을 동일하게 진행했다.
