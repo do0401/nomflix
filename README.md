@@ -1080,3 +1080,68 @@ export default DetailPresenter;
 ```
 
 - 먼저 4개의 presenter에 사전 작업을 동일하게 진행했다.
+
+## 6.1 HomePresenter and Section Components
+
+- 이제 section이라고 불리우는 것을 만들 것이다.
+- upcoming movies 섹션 안에 관련 영화들, popular movies 섹션 안에 영화들과 같은 작업이다.
+
+```jsx
+// Components/Section.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+const Container = styled.div``;
+
+const Title = styled.div``;
+
+const Grid = styled.div``;
+
+const Section = ({ title, children }) => (
+	<Container>
+		<Title>{title}</Title>
+		<Grid>{children}</Grid>
+	</Container>
+);
+
+Section.propTypes = {
+	title: PropTypes.string.isRequired,
+	children: PropTypes.oneOfType([ PropTypes.arrayOf(PropTypes.node), PropTypes.node ])
+};
+
+export default Section;
+```
+
+- Components 폴더 아래에 Section.jsx 파일을 생성하고 작성했다.
+
+```jsx
+// HomePresenter.jsx
+// 코드 수정
+const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) =>
+	loading ? null : (    // loading할 때는 nowPlaying이 존재하지 않으므로 check하여 null 값을 넣어준다.
+		<Container>
+			{nowPlaying &&    // nowPlaying이 있는지, length가 0보다 긴지, 이 섹션이 우리가 원하는대로 render 되는지 체크한다.
+      nowPlaying.length > 0 && <Section title="Now Playing">{nowPlaying.map((movie) => movie.title)}</Section>}
+		</Container>
+	);
+```
+- 그리고 upcoming과 popular도 동일한 작업을 해준다.
+
+```jsx
+// HomePresenter.jsx
+// 코드 수정
+const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) =>
+	loading ? null : (
+		<Container>
+			{nowPlaying &&
+			nowPlaying.length > 0 && <Section title="Now Playing">{nowPlaying.map((movie) => movie.title)}</Section>}
+			{upcoming &&
+			upcoming.length > 0 && <Section title="Upcoming Movies">{upcoming.map((movie) => movie.title)}</Section>}
+			{popular &&
+			popular.length > 0 && <Section title="Popular Movies">{popular.map((movie) => movie.title)}</Section>}
+		</Container>
+	);
+```
+
+- 위에서 children을
