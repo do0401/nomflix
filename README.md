@@ -1144,4 +1144,97 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) =>
 	);
 ```
 
-- 위에서 children을
+- 위에서 children을 저 위치에 넣는 이유는 우리의 섹션에서 div 내부에 원하는 children을 넣을 수 있어야 하기 때문이다.
+
+```jsx
+// Section.jsx
+// 추가 코드
+const Container = styled.div`
+	:not(:last-child) {
+		margin-bottom: 50px;
+	}
+`;
+
+const Title = styled.span`
+	font-size: 14px;
+	font-weight: 600;
+	/* margin-bottom: 25px; */
+`;
+
+const Grid = styled.div`margin-top: 25px;`;
+```
+
+- style 작업을 했다. 이제부터 이 과정을 반복해서 TV쪽도 적용할 것이다.
+
+## #6.2 TVPresenter and Loader Components
+
+- TVPresenter에 동일한 작업을 진행한다.
+
+```jsx
+// TVPresenter.jsx
+// 추가 코드
+import Section from '../../Components/Section';
+
+const Container = styled.div`padding: 0px 10px;`;
+
+const TVPresenter = ({ topRated, popular, airingToday, loading, error }) =>
+	loading ? null : (
+		<Container>
+			{topRated &&
+			topRated.length > 0 && <Section title="Top Rated Shows">{topRated.map((show) => show.name)}</Section>}
+			{popular &&
+			popular.length > 0 && <Section title="Popular Shows">{popular.map((show) => show.name)}</Section>}
+			{airingToday &&
+			airingToday.length > 0 && (
+				<Section title="AiringToday Shows">{airingToday.map((show) => show.name)}</Section>
+			)}
+		</Container>
+	);
+```
+
+- 카테고리 클릭 시 화면이 비워졌다가 로딩이 되는 문제가 있다. 이것을 수정하기 위해 loading도 component를 만든다.
+
+```jsx
+// Loader.jsx
+import React from 'react';
+import styled from 'styled-components';
+
+const Container = styled.div`
+	height: 100vh;
+	width: 100vh;
+	display: flex;
+	justify-content: center;
+	font-size: 28px;
+	margin-top: 20px;
+`;
+
+export default () => (
+	<Container>
+		<span role="img" aria-label="Loading">
+			⏰Loading
+		</span>
+	</Container>
+);
+
+// HomePresenter.jsx
+// 코드 수정
+const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) =>
+	loading ? (
+		<Loader />
+	) : (
+```
+
+- Loading일 때 Loader 컴포넌트를 보여주도록 수정했다.
+
+```jsx
+// Section.jsx
+// 추가 코드
+const Grid = styled.div`
+	margin-top: 25px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 125px);
+	grid-gap: 25px;
+`;
+```
+
+- 섹션 Grid에 grid를 적용했다.
