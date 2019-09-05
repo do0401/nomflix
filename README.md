@@ -1238,3 +1238,120 @@ const Grid = styled.div`
 ```
 
 - 섹션 Grid에 grid를 적용했다.
+
+## #6.3 SearchPresenter Component
+
+```jsx
+// SearchPresenter.jsx
+// 추가 코드
+const Container = styled.div``;
+
+const Form = styled.form``;
+
+const Input = styled.input``;
+
+const SearchPresenter = ({ movieResults, tvResults, airingToday, loading, searchTerm, handleSubmit, error }) => (
+	<Container>
+		<Form onSubmit={handleSubmit}>
+			<Input placeholder="Search Movies or TV Show..." value={searchTerm} />
+		</Form>
+	</Container>
+);
+```
+
+- handelSubmit은 searchTearm과 search 결과를 찾는다.
+- Input에 value를 갖는 이유는, 우리의 input을 제어할 수 있어야 하기 때문이다.
+- 기본적으로 enter를 누르면 form 안에 input 값이 submit되므로 우리는 state를 잃어버리게 된다.
+- 우리는 그런 것을 원하지 않기 때문에 이벤트를 가로챌 것이다.
+
+```jsx
+// SearchContainer.jsx
+// 추가 코드
+handleSubmit = event => {
+  event.preventDefault(); // 추가
+  const { searchTerm } = this.state;
+  if (searchTerm !== "") {
+    this.searchByTerm();
+  }
+};
+```
+
+- presenter들에 적용된 padding 값을 조정한다.
+
+```jsx
+// SearchPresenter.jsx
+// 추가 코드
+const Container = styled.div`padding: 0px 20px;`;
+
+const Form = styled.form`
+	margin-bottom: 50px;
+	width: 100%;
+`;
+
+const Input = styled.input`
+	all: unset;
+	font-size: 28px;
+	width: 100%;
+`;
+
+// HomePresenter.jsx
+// 코드 수정
+const Container = styled.div`padding: 0px 20px;`;
+
+// TVPresenter.jsx
+// 코드 수정
+const Container = styled.div`padding: 0px 20px;`;
+```
+
+- update 관련 함수를 생성하고, 해당 함수를 SearchContainer와 SearchPresenter에 각각 추가한다.
+
+```jsx
+// SearchContainer.jsx
+// 코드 추가
+updateTerm = event => {   // 추가
+		const {
+			target: { value }
+		} = event;
+		this.setState({
+			searchTerm: value
+		})
+	};
+
+render() {
+  const { movieResults, tvResults, searchTerm, error, loading } = this.state;
+  return (
+    <SearchPresenter
+      movieResults={movieResults}
+      tvResults={tvResults}
+      loaidng={loading}
+      error={error}
+      seachTerm={searchTerm}
+      handleSubmit={this.handleSubmit}
+      updateTerm={this.updateTerm}  // 추가
+    />
+  );
+}
+
+// SearchPresenter.jsx
+// 코드 추가
+const SearchPresenter = ({
+	movieResults,
+	tvResults,
+	airingToday,
+	loading,
+	searchTerm,
+	handleSubmit,
+	error,
+	updateTerm  // 추가
+}) => (
+
+SearchPresenter.prototype = {
+	movieResults: PropTypes.array,
+	tvResults: PropTypes.array,
+	error: PropTypes.string,
+	searchTerm: PropTypes.string,
+	loading: PropTypes.bool.isRequired,
+	handleSubmit: PropTypes.func.isRequired,
+	updateTerm: PropTypes.func.isRequired // 추가
+};
+```
