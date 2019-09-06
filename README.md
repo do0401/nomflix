@@ -1334,6 +1334,9 @@ render() {
 
 // SearchPresenter.jsx
 // 코드 추가
+import Loader from "Components/Loader";
+import Section from "Components/Section";
+
 const SearchPresenter = ({
 	movieResults,
 	tvResults,
@@ -1342,8 +1345,30 @@ const SearchPresenter = ({
 	searchTerm,
 	handleSubmit,
 	error,
-	updateTerm  // 추가
+	updateTerm
 }) => (
+	<Container>
+		<Form onSubmit={handleSubmit}>
+			<Input placeholder="Search Movies or TV Show..." value={searchTerm} onChange={updateTerm} />
+		</Form>
+		{loading ? <Loader/> : <>
+			{movieResults && movieResults.length > 0 && (
+				<Section title="Movie Results">
+					{movieResults.map(movie => (
+						<span key={movie.id}>{movie.title}</span>
+				))}
+				</Section>
+			)}
+			{tvResults && tvResults.length > 0 && (
+				<Section title="TV Shows Results">
+					{tvResults.map(show => (
+						<span key={show.id}>{show.name}</span>
+				))}
+				</Section>
+			)}
+		</>}
+	</Container>
+);
 
 SearchPresenter.prototype = {
 	movieResults: PropTypes.array,
@@ -1355,3 +1380,86 @@ SearchPresenter.prototype = {
 	updateTerm: PropTypes.func.isRequired // 추가
 };
 ```
+
+- SearchPresenter에서 Form 밑으로 movie 결과와 TV 결과를 출력하도록 코드를 추가했다.
+
+## #6.4 Message Component
+
+- 이번엔 error text랑 not found text를 만들 것이다.
+- Components 폴더에 Message.jsx 파일을 생성한다.
+
+```jsx
+// Meassege.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+const Container = styled.div`
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+`;
+
+const Text = styled.span`color: ${(props) => props.color};`;
+
+const Message = ({ text, color }) => (
+	<Container>
+		<Text color={color}>{text}</Text>
+	</Container>
+);
+
+Message.propTypes = {
+	text: PropTypes.string.isRequired,
+	color: PropTypes.string.isRequired
+};
+
+export default Message;
+
+```
+
+- Message 컴포넌트를 HomePresenter, TVPresenter, SearchPresenter에 각각 넣어준다.
+
+```jsx
+// HomePresetner.jsx
+// 코드 추가
+{popular &&
+	popular.length > 0 && (
+		<Section title="Popular Movies">
+			{popular.map((movie) => <span key={movie.id}>{movie.title}</span>)}
+		</Section>
+	)}
+	{error && <Message color="#e74c3c" text={error} />}
+</Container>
+
+// TVPresenter.jsx
+// 코드 추가
+{airingToday &&
+	airingToday.length > 0 && (
+		<Section title="AiringToday Shows">
+			{airingToday.map((show) => <span key={show.id}>{show.name}</span>)}
+		</Section>
+	)}
+	{error && <Message color="#e74c3c" text={error} />}
+</Container>
+
+// SearchPresenter.jsx
+// 코드 추가
+{tvResults && tvResults.length > 0 && (
+		<Section title="TV Shows Results">
+			{tvResults.map(show => (
+				<span key={show.id}>{show.name}</span>
+		))}
+		</Section>
+	)}
+</>}
+{error && <Message color="#e74c3c" text={error}></Message>}
+{tvResults &&
+	movieResults &&
+	tvResults.length === 0 &&
+	movieResults.length === 0 && (
+		<Message text="Nothing found" color="#95a5a6" />
+	)
+}
+</Container>
+```
+
