@@ -17,12 +17,12 @@
 
 ## #1.1 Arrow Function
 
-- 화살표 함수는 기보적으로 return 을 한다는 것이 함축되어 있음
-- argument 가 하나일 때는 괄호가 필요 없음
+- 화살표 함수는 기보적으로 return 을 한다는 것이 함축되어 있다
+- argument 가 하나일 때는 괄호가 필요 없다
 
 ## #1.2 Template Literals
 
-- `(backticks) 를 사용 함
+- `(backticks) 를 사용한다
 
 ## #1.3 Object Destructuring
 
@@ -32,16 +32,16 @@
 
 ## #1.6 Array.map
 
-- return 한 값으로 이루어진 배열을 return 함
+- return 한 값으로 이루어진 배열을 return 한다
 
 ## #1.7 Array.filter
 
-- 주어진 function을 통과한 모든 원소들로 이루어진 배열을 return 함
+- 주어진 function을 통과한 모든 원소들로 이루어진 배열을 return 한다
 
 ## #1.8 .forEach / .includes / .push
 
-- .forEach : 각각의 아이템에 대해서 어떠한 시행만 함. map과 달리 배열을 return 하지 않음
-- .includes : 배열에 특정 아이템이 존재하는지 확인할 수 있음
+- .forEach : 각각의 아이템에 대해서 어떠한 시행만 함. map과 달리 배열을 return 하지 않는다
+- .includes : 배열에 특정 아이템이 존재하는지 확인할 수 있다
 
 ## `2. Project Setup`
 
@@ -50,7 +50,7 @@
 1. `yarn global add npx`<br>
 2. `npx create-react-app nomflix`
 
-- npx는 패키지를 설치하고 실행 후 작업이 끝나면 PC에서 삭제함
+- npx는 패키지를 설치하고 실행 후 작업이 끝나면 PC에서 삭제한다
 ```js
 //App.js
 import React, { Component } from 'react';
@@ -77,11 +77,11 @@ ReactDOM.render(<App />, document.getElementById('root'));
 //.env
 NODE_PATH=src
 ```
-- .env에서 위와 같이 설정하면 기본적으로 src 파일을 보게 만들어 줌
+- .env에서 위와 같이 설정하면 기본적으로 src 파일을 보게 만들어 준다
 
 `yarn add react-router-dom`
-- React App에게 Home에서 시작해야 한다거나 /TV로 가면 TV Routes로 가도록 하는 것은 React Router로 해결할 수 있음
-- React Router는 React에서 거의 유일한 Routing 패키지임
+- React App에게 Home에서 시작해야 한다거나 /TV로 가면 TV Routes로 가도록 하는 것은 React Router로 해결할 수 있다
+- React Router는 React에서 거의 유일한 Routing 패키지다
 
 ```js
 // Router.js
@@ -116,11 +116,11 @@ export default () => "Detail";
 
 ## #2.2 React Router Part Two
 
-- Hash Router는 간단하지만 URL을 이쁘게 보여주지 않음
-- Browser Router는 실제 브라우저처럼 보여줌
-- 둘은 각기 다른 것을 사용하지만 기능은 같음
+- Hash Router는 간단하지만 URL을 이쁘게 보여주지 않는다
+- Browser Router는 실제 브라우저처럼 보여준다
+- 둘은 각기 다른 것을 사용하지만 기능은 같다
 
-- React Router에는 Composition이라는 것이 있고 이것은 두 개 이상의 Route를 렌더링하는 방식임(동시에)
+- React Router에는 Composition이라는 것이 있고 이것은 두 개 이상의 Route를 렌더링하는 방식이다(동시에)
 
 ```js
 // Header.js
@@ -142,7 +142,7 @@ export default () => (
   </header>
 );
 ```
-- Header.js 생성
+- Header.js 를 생성한다
 
 ```js
 // Router.js
@@ -163,19 +163,19 @@ export default () => (
   </Router>
 )
 ```
-- route에 존재하지 않는 url로 접속하면 "/" 로 redirect 됨
-- Switch는 한 번에 오직 하나의 Route만 Render하게 해줌
+- route에 존재하지 않는 url로 접속하면 "/" 로 redirect 된다
+- Switch는 한 번에 오직 하나의 Route만 Render하게 해준다
 
 ## `3. Styles`
 
 ## #3.0 CSS in React part One
 
-- React 에서 CSS 작업을 할 때 가능한 옵션의 기본은 styles.css 파일을 추가하는 것임
-- 하지만 이 방법의 문제점은 컴포넌트와 CSS가 분리되어 있다는 것임
-- 컴포넌트를 이용하는 것의 요점은 어플리케이션의 부분 부분을 캡슐화하는 것임
-- 모든 게 한 공간에 있는 것이 최종 목표임
+- React 에서 CSS 작업을 할 때 가능한 옵션의 기본은 styles.css 파일을 추가하는 것이다
+- 하지만 이 방법의 문제점은 컴포넌트와 CSS가 분리되어 있다는 것이다
+- 컴포넌트를 이용하는 것의 요점은 어플리케이션의 부분 부분을 캡슐화하는 것이다
+- 모든 게 한 공간에 있는 것이 최종 목표다
 
-- 먼저 Components 폴더 안에 Header 폴더를 생성하고 Header 폴더 안에 Header.js를 이동시키고 index.js를 생성함
+- 먼저 Components 폴더 안에 Header 폴더를 생성하고 Header 폴더 안에 Header.js를 이동시키고 index.js를 생성한다
 
 ```js
 // index.js
@@ -183,10 +183,10 @@ import Header from "./Header";
 
 export default Header;
 ```
-- index.js 를 만드는 이유는 내 어플리케이션에서 아래와 같이 Header를 호출하고 싶기 때문임
+- index.js 를 만드는 이유는 내 어플리케이션에서 아래와 같이 Header를 호출하고 싶기 때문이다
 `import Header from "Components/Header";`
-- 이런 형태는 기본적으로 해당 폴더로 가서 index 파일을 보개 해줌
-- 만약 index.js가 없다면 아래와 같이 호출해야 함
+- 이런 형태는 기본적으로 해당 폴더로 가서 index 파일을 보개 해준다
+- 만약 index.js가 없다면 아래와 같이 호출해야 한다
 `import Header from "Components/Header/Header";`
 
 ```js
@@ -477,7 +477,7 @@ export default withRouter(({ location: { pathname } }) => (
 - baseURL, headers, timeout 같은 것들을 여러 곳에서 반복해서 작성해 줄 필요가 없다는 것이다.
 
 ```js
-// app.js
+// api.js
 import axios from "axios";
 
 const api = axios.create({
@@ -498,7 +498,7 @@ export default api;
 - app.js에 2개의 큰 오브젝트를 생성한다. 여기에 모든 request와 function들을 넣는다.
 
 ```js
-// app.js
+// api.js
 export const moviesApi = {
   nowPlaying: () => api.get("movie/now_playing"),
   upcoming: () => api.get("movie/upcoming"),
@@ -519,7 +519,7 @@ export const tvApi = {
 - app.js에서 movieDetail과 showDetail을 추가한다.
 
 ```js
-// app.js
+// api.js
 export const moviesApi = {
   nowPlaying: () => api.get("movie/now_playing"),
   upcoming: () => api.get("movie/upcoming"),
@@ -538,7 +538,7 @@ export const tvApi = {
 - api에서는 "append_to_response"를 지원하는데, 이를 통해서 예고편이나 포스터를 가져올 수 있다.
 
 ```js
-// app.js
+// api.js
 export const moviesApi = {
   nowPlaying: () => api.get("movie/now_playing"),
   upcoming: () => api.get("movie/upcoming"),
@@ -1463,3 +1463,77 @@ export default Message;
 </Container>
 ```
 
+## #6.5 Poster Component part One
+
+- Poster Component 작업을 한다.
+- Component 폴더에 Poster.jsx 파일을 생성한다.
+
+```jsx
+// Poster.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const Container = styled.div``;
+
+const ImageContainer = styled.div``;
+
+const Image = styled.div``;
+
+const Rating = styled.span``;
+
+const Title = styled.span``;
+
+const Year = styled.span``;
+
+const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => (
+	<Link to={isMovie ? `/movie/${id}` : `/show/${id}`}>
+		<Container>
+			<ImageContainer>
+				<Image bgUrl={imageUrl} />
+				<Rating>
+					<span role="img" aria-label="rating">
+						⭐
+					</span>{' '}
+					{rating}/10
+				</Rating>
+			</ImageContainer>
+			<Title>{title}</Title>
+			<Year>{year}</Year>
+		</Container>
+	</Link>
+);
+
+Poster.propTypes = {
+	id: PropTypes.number.isRequired,
+	imageUrl: PropTypes.string,
+	title: PropTypes.string.isRequired,
+	rating: PropTypes.number,
+	year: PropTypes.string,
+	isMovie: PropTypes.bool
+};
+
+export default Poster;
+
+```
+
+- Poster는 id, imageUrl, title, rating, year과 같은 것들을 가지고 있다.
+- user에게 / 또는 / ID propTypes를 보내야 하므로 id도 필요하다.
+- Poster Container를 HomePresenter에 적용시켜본다.
+
+```jsx
+// HomePresenter.jsx
+// 코드 수정
+<Container>
+	{nowPlaying &&
+	nowPlaying.length > 0 && <Section title="Now Playing">{nowPlaying.map((movie) => <Poster />)}</Section>}
+	{upcoming &&
+	upcoming.length > 0 && <Section title="Upcoming Movies">{upcoming.map((movie) => <Poster />)}</Section>}
+	{popular &&
+	popular.length > 0 && <Section title="Popular Movies">{popular.map((movie) => <Poster />)}</Section>}
+	{error && <Message color="#e74c3c" text={error} />}
+</Container>
+```
+
+- `<span key={movie.id}>{movie.title}</span>` 을 `<Poster />` 로 수정했다.
