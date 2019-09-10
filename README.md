@@ -726,7 +726,7 @@ export default () => 'Detail';
 
 ```jsx
 // HomeContainer.jsx
-// 추가 코드
+// 코드 추가
 import { moviesApi } from "api";
 
   async componentDidMount() {
@@ -798,7 +798,7 @@ import { moviesApi } from "api";
 
 ```jsx
 // TVContainer.jsx
-// 추가 코드
+// 코드 추가
 import { tvApi } from '../../api';
 
   async componentDidMount() {
@@ -830,7 +830,7 @@ import { tvApi } from '../../api';
 
 ```jsx
 // SearchContainer.jsx
-// 추가 코드
+// 코드 추가
 import { moviesApi, tvApi } from "../../api";
 
 handleSubmit = () => {
@@ -876,7 +876,7 @@ handleSubmit = () => {
 
 ```jsx
 // Router.jsx
-// 추가 코드
+// 코드 추가
 import Detail from "Routes/Detail";
 
   <Route path="/movie/:id" component={Detail} />
@@ -899,7 +899,7 @@ import Detail from "Routes/Detail";
 
 ```jsx
 // DetailContainer.jsx
-// 추가 코드
+// 코드 추가
 async componentDidMount() {
   const { match: { params: { id } }, history: { push } } = this.props;  // 마운트되면 props에서 id를 가져온다.
   const parsedId = parseInt(id);    // id가 string일 것이므로 parsedInt로 number로 바꿔준다.
@@ -915,7 +915,7 @@ async componentDidMount() {
 
 ```jsx
 // DetailContainer.jsx
-// 추가 코드
+// 코드 추가
 async componentDidMount() {
   const { match: { params: { id } }, history: { push }, location: { pathname } } = this.props;
   this.isMovie = pathname.includes('/movie/');    // isMovis를 전역으로 선언했다. 마치 this.state나 this.handleSubmit을 사용한 것처럼 선언했고
@@ -959,7 +959,7 @@ async componentDidMount() {
 
 ```jsx
 // DetailContainer.jsx
-// 추가 코드
+// 코드 추가
 async componentDidMount() {
   const { match: { params: { id } }, history: { push } } = this.props;
   const { isMovie } = this.state;
@@ -1148,7 +1148,7 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) =>
 
 ```jsx
 // Section.jsx
-// 추가 코드
+// 코드 추가
 const Container = styled.div`
 	:not(:last-child) {
 		margin-bottom: 50px;
@@ -1172,7 +1172,7 @@ const Grid = styled.div`margin-top: 25px;`;
 
 ```jsx
 // TVPresenter.jsx
-// 추가 코드
+// 코드 추가
 import Section from '../../Components/Section';
 
 const Container = styled.div`padding: 0px 10px;`;
@@ -1228,7 +1228,7 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) =>
 
 ```jsx
 // Section.jsx
-// 추가 코드
+// 코드 추가
 const Grid = styled.div`
 	margin-top: 25px;
 	display: grid;
@@ -1243,7 +1243,7 @@ const Grid = styled.div`
 
 ```jsx
 // SearchPresenter.jsx
-// 추가 코드
+// 코드 추가
 const Container = styled.div``;
 
 const Form = styled.form``;
@@ -1266,7 +1266,7 @@ const SearchPresenter = ({ movieResults, tvResults, airingToday, loading, search
 
 ```jsx
 // SearchContainer.jsx
-// 추가 코드
+// 코드 추가
 handleSubmit = event => {
   event.preventDefault(); // 추가
   const { searchTerm } = this.state;
@@ -1280,7 +1280,7 @@ handleSubmit = event => {
 
 ```jsx
 // SearchPresenter.jsx
-// 추가 코드
+// 코드 추가
 const Container = styled.div`padding: 0px 20px;`;
 
 const Form = styled.form`
@@ -1537,3 +1537,123 @@ export default Poster;
 ```
 
 - `<span key={movie.id}>{movie.title}</span>` 을 `<Poster />` 로 수정했다.
+
+## #6.6 Rendering Poster Component
+
+- 이제 Poster의 각 항목들을 렌더링해보자
+
+```jsx
+// HomePresenter.jsx
+// 코드 추가
+<Section title="Now Playing">
+	{nowPlaying.map((movie) => (
+		<Poster		// 3개의 섹션 안에 있는 Poster component에 아래와 같이 prop 값을 할당한다.
+			key={movie.id}
+			id={movie.id}
+			title={movie.original_title}
+			imageUrl={movie.poster_path}
+			rating={movie.vote_average}
+			year={movie.release_date.substring(0, 4)}
+			isMovie={true}
+		/>
+	))}
+</Section>
+
+<Section title="Upcoming Movies">
+	{upcoming.map((movie) => (
+		<Poster
+			key={movie.id}
+			id={movie.id}
+			title={movie.original_title}
+			imageUrl={movie.poster_path}
+			rating={movie.vote_average}
+			year={movie.release_date.substring(0, 4)}
+			isMovie={true}
+		/>
+	))}
+</Section>
+	
+<Section title="Popular Movies">
+	{popular.map((movie) => (
+		<Poster
+			key={movie.id}
+			id={movie.id}
+			title={movie.original_title}
+			imageUrl={movie.poster_path}
+			rating={movie.vote_average}
+			year={movie.release_date.substring(0, 4)}
+			isMovie={true}
+		/>
+	))}
+</Section>
+
+// TVPresenter.jsx
+// 코드 추가
+<Section title="Top Rated Shows">
+	{topRated.map((show) => (
+		<Poster		// TVPresenter에도 동일하게 Poster component에 아래와 같이 prop 값을 할당한다.
+			key={show.id}
+			id={show.id}
+			title={show.original_name}
+			imageUrl={show.poster_path}
+			rating={show.vote_average}
+			year={show.first_air_date.substring(0, 4)}
+		/>
+	))}
+</Section>
+
+<Section title="Popular Shows">
+	{popular.map((show) => (
+		<Poster
+			key={show.id}
+			id={show.id}
+			title={show.original_name}
+			imageUrl={show.poster_path}
+			rating={show.vote_average}
+			year={show.first_air_date.substring(0, 4)}
+		/>
+	))}
+</Section>
+
+<Section title="AiringToday Shows">
+	{airingToday.map((show) => (
+		<Poster
+			key={show.id}
+			id={show.id}
+			title={show.original_name}
+			imageUrl={show.poster_path}
+			rating={show.vote_average}
+			year={show.first_air_date.substring(0, 4)}
+		/>
+	))}
+</Section>
+
+// SearchPresenter.jsx
+// 코드 추가
+<Section title="Movie Results">
+	{movieResults.map(movie => (
+		<Poster		// SearchPresenter도 마찬가지
+		key={movie.id}
+		id={movie.id}
+		title={movie.original_title}
+		imageUrl={movie.poster_path}
+		rating={movie.vote_average}
+		year={movie.release_date.substring(0, 4)}
+		isMovie={true}
+	/>
+))}
+</Section>
+
+<Section title="TV Shows Results">
+	{tvResults.map(show => (
+		<Poster
+		key={show.id}
+		id={show.id}
+		title={show.original_name}
+		imageUrl={show.poster_path}
+		rating={show.vote_average}
+		year={show.first_air_date.substring(0, 4)}
+	/>
+))}
+</Section>
+```
