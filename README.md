@@ -1657,3 +1657,80 @@ export default Poster;
 ))}
 </Section>
 ```
+
+## #6.7 Poster Component part Two
+
+- poster styling 작업을 한다.
+
+```jsx
+// Poster.jsx
+// 코드 추가
+const Container = styled.div`font-size: 12px;`;
+
+const Image = styled.div`
+	background-image: url(${(props) => props.bgUrl});
+	height: 180px;
+	background-size: cover;
+	border-radius: 4px;
+	background-position: center center;
+	transition: opacity 0.1s linear;
+`;
+
+const Rating = styled.span`
+	bottom: 5px;
+	right: 5px;
+	position: absolute;
+	opacity: 0;
+	transition: opacity 0.1s linear;
+`;
+
+const ImageContainer = styled.div`
+	margin-bottom: 5px;
+	position: relative;
+	&:hover {
+		${Image} {
+			opacity: 0.3;
+		}
+		${Rating} {
+			opacity: 1;
+		}
+	}
+`;
+
+const Title = styled.span`
+	display: block;
+	font-size: 12px;
+	margin-bottom: 3px;
+`;
+
+const Year = styled.span`
+	font-size: 10px;
+	color: rgba(255, 255, 255, 0.5);
+`;
+
+const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => (
+	<Link to={isMovie ? `/movie/${id}` : `/show/${id}`}>
+		<Container>
+			<ImageContainer>
+				<Image
+					bgUrl={
+						imageUrl ? `https://image.tmdb.org/t/p/w300${imageUrl}` : require('../assets/noPosterSmall.png')
+						// imageUrl이 있으면 image를 보여주고, 없다면 poster가 없다는 image를 대신 보여준다.
+					}
+				/>
+				<Rating>
+					<span role="img" aria-label="rating">
+						⭐
+					</span>{' '}
+					{rating}/10
+				</Rating>
+			</ImageContainer>
+			<Title>
+				{title.length > 18 ? `${title.substring(0, 18)}...` : title}
+				// title 길이가 18 보다 길면 잘라내고 말줄임 표시를 한다.
+			</Title>
+			<Year>{year}</Year>
+		</Container>
+	</Link>
+);
+```
