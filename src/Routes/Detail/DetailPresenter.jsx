@@ -6,7 +6,8 @@ import Loader from 'Components/Loader';
 const Container = styled.div`
 	height: calc(100vh - 50px);
 	width: 100%;
-	position: absolute;
+	position: relative;
+	padding: 50px;
 `;
 
 const Backdrop = styled.div`
