@@ -1802,3 +1802,78 @@ const DetailPresenter = ({ result, loading, error }) =>
 ```
 
 - DetailPresenter 에서 styling 및 Detail 페이지 구성 작업을 했다.
+
+## #6.9 Detail Container part Two
+
+- content에 data를 넣어보자
+
+```jsx
+// DetailPresenter.jsx
+// 코드 추가
+const Data = styled.div`
+	width: 70%;
+	margin-left: 10px;
+`;
+
+const Title = styled.h3`font-size: 32px;`;
+
+const ItemContainer = styled.div`margin: 20px 0;`;
+
+const Item = styled.span``;
+
+const Divider = styled.span`margin: 0 10px;`;
+
+const Overview = styled.p`
+	font-size: 12px;
+	opacity: 0.7;
+	line-height: 1.5;
+	width: 50%;
+	margin-top: 10px;
+`;
+
+const DetailPresenter = ({ result, loading, error }) =>
+	loading ? (
+		<Loader />
+	) : (
+		<Container>
+			<Backdrop bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`} />
+			<Content>
+				<Cover
+					bgImage={
+						result.poster_path ? (
+							`https://image.tmdb.org/t/p/original${result.poster_path}`
+						) : (
+							require('../../assets/noPosterSmall.png')
+						)
+					}
+				/>
+				<Data>
+					<Title>{result.original_title ? result.original_title : result.original_name}</Title>
+					<ItemContainer>
+						<Item>
+							{result.release_date ? (
+								result.release_date.substring(0, 4)
+							) : (
+								result.first_air_date.substring(0, 4)
+							)}
+						</Item>
+						<Divider>•</Divider>
+						<Item>{result.runtime ? result.runtime : result.episode_run_time[0]} min</Item>
+						<Divider>•</Divider>
+						<Item>
+							{result.genres &&
+								result.genres.map(
+									(genre, index) =>
+										index === result.genres.length - 1 ? genre.name : `${genre.name} / `
+								)}
+						</Item>
+						<Overview>{result.overview}</Overview>
+					</ItemContainer>
+				</Data>
+			</Content>
+		</Container>
+	);
+```
+
+- Detail 페이지에서 보여질 타이틀과 각종 정보를 표시했다.
+- movie와 tv의 result 값 중 컬럼명이 다른 것들은 분기처리를 해줘야 한다.
