@@ -1877,3 +1877,267 @@ const DetailPresenter = ({ result, loading, error }) =>
 
 - Detail 페이지에서 보여질 타이틀과 각종 정보를 표시했다.
 - movie와 tv의 result 값 중 컬럼명이 다른 것들은 분기처리를 해줘야 한다.
+
+## #6.10 React Helmet
+
+- 페이지에서 탭을 누르면 title을 바꿔줘야 한다.
+- 이를 위해서 React-Helmet 모듈을 사용한다.
+- React-Helmet을 활용하면 웹사이트의 haed를 수정하기 쉽다.
+
+`yarn add react-helmet`
+
+```jsx
+// HomePresetner.jsx
+// 코드 추가
+const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) => (
+	<>
+	<Helmet>
+		<title>Movies | Nomflix</title>
+	</Helmet>
+	{loading ? (
+		<Loader />
+	) : (
+		<Container>
+			<Helmet>
+				<title>Movies | Nomflix</title>
+			</Helmet>
+			{nowPlaying &&
+			nowPlaying.length > 0 && (
+				<Section title="Now Playing">
+					{nowPlaying.map((movie) => (
+						<Poster
+							key={movie.id}
+							id={movie.id}
+							title={movie.original_title}
+							imageUrl={movie.poster_path}
+							rating={movie.vote_average}
+							year={movie.release_date.substring(0, 4)}
+							isMovie={true}
+						/>
+					))}
+				</Section>
+			)}
+			{upcoming &&
+			upcoming.length > 0 && (
+				<Section title="Upcoming Movies">
+					{upcoming.map((movie) => (
+						<Poster
+							key={movie.id}
+							id={movie.id}
+							title={movie.original_title}
+							imageUrl={movie.poster_path}
+							rating={movie.vote_average}
+							year={movie.release_date.substring(0, 4)}
+							isMovie={true}
+						/>
+					))}
+				</Section>
+			)}
+			{popular &&
+			popular.length > 0 && (
+				<Section title="Popular Movies">
+					{popular.map((movie) => (
+						<Poster
+							key={movie.id}
+							id={movie.id}
+							title={movie.original_title}
+							imageUrl={movie.poster_path}
+							rating={movie.vote_average}
+							year={movie.release_date.substring(0, 4)}
+							isMovie={true}
+						/>
+					))}
+				</Section>
+			)}
+			{error && <Message color="#e74c3c" text={error} />}
+		</Container>
+	)}
+	</>
+);
+
+// TVPresenter.jsx
+// 코드 추가
+const TVPresenter = ({ topRated, popular, airingToday, loading, error }) => (
+	<>
+		<Helmet>
+			<title>TV Shows | Nomfilx</title>
+		</Helmet>
+		{loading ? (
+		<Loader />
+	) : (
+		<Container>
+			{topRated &&
+			topRated.length > 0 && (
+				<Section title="Top Rated Shows">
+					{topRated.map((show) => (
+						<Poster
+							key={show.id}
+							id={show.id}
+							title={show.original_name}
+							imageUrl={show.poster_path}
+							rating={show.vote_average}
+							year={show.first_air_date.substring(0, 4)}
+						/>
+					))}
+				</Section>
+			)}
+			{popular &&
+			popular.length > 0 && (
+				<Section title="Popular Shows">
+					{popular.map((show) => (
+						<Poster
+							key={show.id}
+							id={show.id}
+							title={show.original_name}
+							imageUrl={show.poster_path}
+							rating={show.vote_average}
+							year={show.first_air_date.substring(0, 4)}
+						/>
+					))}
+				</Section>
+			)}
+			{airingToday &&
+			airingToday.length > 0 && (
+				<Section title="AiringToday Shows">
+					{airingToday.map((show) => (
+						<Poster
+							key={show.id}
+							id={show.id}
+							title={show.original_name}
+							imageUrl={show.poster_path}
+							rating={show.vote_average}
+							year={show.first_air_date.substring(0, 4)}
+						/>
+					))}
+				</Section>
+			)}
+			{error && <Message color="#e74c3c" text={error} />}
+		</Container>
+	)}
+	</>
+);
+
+// SearchPresenter.jsx
+// 코드 추가
+const SearchPresenter = ({
+	movieResults,
+	tvResults,
+	airingToday,
+	loading,
+	searchTerm,
+	handleSubmit,
+	error,
+	updateTerm
+}) => (
+	<Container>
+		<Helmet>
+			<title>Search | Nomflix</title>
+		</Helmet>
+		<Form onSubmit={handleSubmit}>
+			<Input placeholder="Search Movies or TV Show..." value={searchTerm} onChange={updateTerm} />
+		</Form>
+		{loading ? <Loader/> : <>
+			{movieResults && movieResults.length > 0 && (
+				<Section title="Movie Results">
+					{movieResults.map(movie => (
+						<Poster
+						key={movie.id}
+						id={movie.id}
+						title={movie.original_title}
+						imageUrl={movie.poster_path}
+						rating={movie.vote_average}
+						year={movie.release_date.substring(0, 4)}
+						isMovie={true}
+					/>
+				))}
+				</Section>
+			)}
+			{tvResults && tvResults.length > 0 && (
+				<Section title="TV Shows Results">
+					{tvResults.map(show => (
+						<Poster
+						key={show.id}
+						id={show.id}
+						title={show.original_name}
+						imageUrl={show.poster_path}
+						rating={show.vote_average}
+						year={show.first_air_date.substring(0, 4)}
+					/>
+				))}
+				</Section>
+			)}
+		</>}
+		{error && <Message color="#e74c3c" text={error}></Message>}
+		{tvResults &&
+			movieResults &&
+			tvResults.length === 0 &&
+			movieResults.length === 0 && (
+				<Message text="Nothing found" color="#95a5a6" />
+			)
+		}
+	</Container>
+);
+
+// DetailPresenter.jsx
+// 코드 추가
+const DetailPresenter = ({ result, loading, error }) =>
+	loading ? (
+		<>
+		<Helmet>
+			<title>Loading | Nomflix</title>
+		</Helmet>
+		<Loader />
+		</>
+	) : (
+		<Container>
+			<Helmet>
+				<title>{result.original_title ? result.original_title : result.original_name}{" "} | Nomflix</title>
+			</Helmet>
+			<Backdrop bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`} />
+			<Content>
+				<Cover
+					bgImage={
+						result.poster_path ? (
+							`https://image.tmdb.org/t/p/original${result.poster_path}`
+						) : (
+							require('../../assets/noPosterSmall.png')
+						)
+					}
+				/>
+				<Data>
+					<Title>{result.original_title ? result.original_title : result.original_name}</Title>
+					<ItemContainer>
+						<Item>
+							{result.release_date ? (
+								result.release_date.substring(0, 4)
+							) : (
+								result.first_air_date.substring(0, 4)
+							)}
+						</Item>
+						<Divider>•</Divider>
+						<Item>{result.runtime ? result.runtime : result.episode_run_time[0]} min</Item>
+						<Divider>•</Divider>
+						<Item>
+							{result.genres &&
+								result.genres.map(
+									(genre, index) =>
+										index === result.genres.length - 1 ? genre.name : `${genre.name} / `
+								)}
+						</Item>
+						<Overview>{result.overview}</Overview>
+					</ItemContainer>
+				</Data>
+			</Content>
+		</Container>
+	);
+```
+
+- 각 presenter에 Helmet을 통해 title이 변경되도록 작업했다.
+
+## #6.11 Code Challenges
+
+- [ ] IMDB Link
+- [ ] Tabs inside of Movie / Show Details (YT Videos, Production Company & Countries)
+- [ ] Collections Link
+- [ ] /collections Route
+- [ ] On TV Show, show seasons and creators

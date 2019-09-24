@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Helmet from 'react-helmet';
 import Section from '../../Components/Section';
 import Loader from '../../Components/Loader';
 import Message from '../../Components/Message';
 import Poster from '../../Components/Poster';
 
-const Container = styled.div`padding: 0px 20px;`;
+const Container = styled.div`padding: 20px;`;
 
-const TVPresenter = ({ topRated, popular, airingToday, loading, error }) =>
-	loading ? (
+const TVPresenter = ({ topRated, popular, airingToday, loading, error }) => (
+	<>
+		<Helmet>
+			<title>TV Shows | Nomfilx</title>
+		</Helmet>
+		{loading ? (
 		<Loader />
 	) : (
 		<Container>
@@ -60,7 +65,9 @@ const TVPresenter = ({ topRated, popular, airingToday, loading, error }) =>
 			)}
 			{error && <Message color="#e74c3c" text={error} />}
 		</Container>
-	);
+	)}
+	</>
+);
 
 TVPresenter.prototype = {
 	topRated: PropTypes.array,
