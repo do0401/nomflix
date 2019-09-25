@@ -54,6 +54,13 @@ const ItemContainer = styled.div`margin: 20px 0;`;
 
 const Item = styled.span``;
 
+const Imdb = styled.a`
+	margin-left: 10px;
+	background-color: #ffa200;
+	padding: 1px 3px;
+	border-radius: 3px;
+`;
+
 const Divider = styled.span`margin: 0 10px;`;
 
 const Overview = styled.p`
@@ -108,9 +115,15 @@ const DetailPresenter = ({ result, loading, error }) =>
 										index === result.genres.length - 1 ? genre.name : `${genre.name} / `
 								)}
 						</Item>
+						<Item>
+							{result.imdb_id ? 
+							<Imdb href={`https://www.imdb.com/title/${result.imdb_id}`} target="_blank">
+								IMDB
+							</Imdb> : null}
+						</Item>
 						<Overview>{result.overview}</Overview>
 					</ItemContainer>
-					<Tab></Tab>
+					<Tab videos={result.videos.results}></Tab>
 				</Data>
 			</Content>
 		</Container>

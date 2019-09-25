@@ -4,9 +4,23 @@ import styled from 'styled-components';
 
 const List = styled(TabList)`
   display: flex;
-  width: 300px;
+  width: 400px;
   justify-content: space-between;
 `;
+
+const TabTitle = styled(Tab)`
+	width: 100%;
+	height: 30px;
+	text-align: center;
+	line-height: 29px;
+	background-color: rgba(255, 255, 255, 0.3);
+`;
+
+const Panel = styled(TabPanel)``;
+
+const Video = styled.div``;
+
+const VideoItem = styled.video``;
 
 // const Item = styled.li`
 // 	width: 80px;
@@ -27,14 +41,19 @@ export default (props) => (
 	<Tabs>
 		{console.log(props)}
 		<List>
-			<Tab>Videos</Tab>
-			<Tab>Production Companies</Tab>
-			<Tab>Countries</Tab>
+			<TabTitle>Videos</TabTitle>
+			<TabTitle>Production Companies</TabTitle>
+			<TabTitle>Countries</TabTitle>
 		</List>
 
-		<TabPanel>
+		<Panel>
 			<h2>Videos Contents</h2>
-		</TabPanel>
+			<Video>
+				{props.videos &&
+					props.videos.length > 0 &&
+					props.videos.map((video) => <VideoItem src={`https://www.youtube.com/watch?v=${video.key}`} />)}
+			</Video>
+		</Panel>
 		<TabPanel>
 			<h2>Production Companies List</h2>
 		</TabPanel>
