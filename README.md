@@ -2141,3 +2141,30 @@ const DetailPresenter = ({ result, loading, error }) =>
 - [X] Collections Link
 - [ ] Collections Route
 - [X] On TV Show, show seasons and creators
+
+## #7.1 Deploying to Netlify
+
+- 먼저 gh-pages 를 설치한다
+
+`yarn add gh-pages`
+
+- 그리고 package.json 에서 scripts를 추가한다.
+
+```json
+// package.json
+"scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "gh-page -d build",
+    "predeploy": "yarn run build"
+	},
+"homepage": "https://do0401.github.io/nomflix",
+```
+
+- homepage는 최초에는 위와 같이 설정하지만, 이후(push할 때)에는 netlify에서 설정해준 URL로 바꿔줘야 한다.
+
+# Preview
+
+Try it on [netlify](https://elastic-clarke-10fafb.netlify.com/#/)

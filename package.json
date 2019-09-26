@@ -26,7 +26,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "https://elastic-clarke-10fafb.netlify.com/",
+  "homepage": "https://elastic-clarke-10fafb.netlify.com/#/",
   "browserslist": {
     "production": [
       ">0.2%",
