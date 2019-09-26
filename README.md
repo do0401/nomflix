@@ -2136,8 +2136,8 @@ const DetailPresenter = ({ result, loading, error }) =>
 
 ## #6.11 Code Challenges
 
-- [ ] IMDB Link
-- [ ] Tabs inside of Movie / Show Details (YT Videos, Production Company & Countries)
-- [ ] Collections Link
-- [ ] /collections Route
-- [ ] On TV Show, show seasons and creators
+- [X] IMDB Link
+- [X] Tabs inside of Movie / Show Details (YT Videos, Production Company & Countries)
+- [X] Collections Link
+- [ ] Collections Route
+- [X] On TV Show, show seasons and creators

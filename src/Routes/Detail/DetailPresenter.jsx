@@ -123,7 +123,7 @@ const DetailPresenter = ({ result, loading, error }) =>
 						</Item>
 						<Overview>{result.overview}</Overview>
 					</ItemContainer>
-					<Tab videos={result.videos.results}></Tab>
+					<Tab videos={result.videos.results} companies={result.production_companies} seasons={result.seasons} results={result}></Tab>
 				</Data>
 			</Content>
 		</Container>
